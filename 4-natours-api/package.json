@@ -1,0 +1,15 @@
+{
+  "name": "4-natours-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "Igor",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
