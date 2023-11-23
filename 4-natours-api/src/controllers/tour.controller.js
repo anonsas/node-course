@@ -6,6 +6,7 @@ class TourController {
   getTours(req, res) {
     res.status(200).json({
       status: 'success',
+      createdAt: req.requestTime,
       results: toursData.length,
       data: { tours: toursData },
     });
