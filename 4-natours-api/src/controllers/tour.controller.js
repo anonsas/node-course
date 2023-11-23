@@ -28,13 +28,12 @@ class TourController {
 
   createTour(req, res) {
     const newTour = req.body;
-    toursData.push(newTour);
-
+    toursData.push({ id: toursData.length, ...newTour });
     fs.writeFile('./dev-data/data/tours-simple.json', JSON.stringify(toursData), (error) => {
       if (error) throw "Couldn't write a new tour";
       res.status(201).json({
         status: 'success',
-        data: { tour: newTour },
+        data: { tour: { id: toursData.length - 1, ...newTour } },
       });
     });
   }
@@ -52,6 +51,25 @@ class TourController {
         data: { tour: updatedTour },
       });
     });
+  }
+
+  deleteTourById(req, res) {
+    const id = +req.params.id;
+    const index = toursData.findIndex((tour) => tour.id === id);
+    if (index >= 0) {
+      toursData.splice(index, 1);
+      fs.writeFile('./dev-data/data/tours-simple.json', JSON.stringify(toursData), (error) => {
+        if (error) throw "Couldn't delete a tour";
+        res.status(200).json({
+          status: 'success',
+        });
+      });
+    } else {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Invalid ID',
+      });
+    }
   }
 }
 
