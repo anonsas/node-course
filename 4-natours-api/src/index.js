@@ -1,19 +1,20 @@
 const express = require('express');
 const app = express();
-const router = require('./routes');
+const tourRouter = require('./routes/tour.router');
+const userRouter = require('./routes/user.router');
 const morgan = require('morgan');
+
+console.log(userRouter);
+
 const auth = (req, res, next) => {
   console.log('got you');
   next();
 };
 
-const myLogger = (req, res, next) => {
-  req.requestTime = Date.now();
-  next();
-};
-
+app.use(morgan('dev'));
 app.use(express.json());
-app.use(auth, myLogger);
-app.use('/api', router);
+app.use(auth);
+app.use('/api/users', userRouter);
+app.use('/api/tours', tourRouter);
 
 app.listen(4000);

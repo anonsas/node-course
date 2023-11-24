@@ -6,16 +6,15 @@ class TourController {
   getTours(req, res) {
     res.status(200).json({
       status: 'success',
-      createdAt: req.requestTime,
       results: toursData.length,
       data: { tours: toursData },
     });
   }
 
-  getTourById(req, res) {
+  getTour(req, res) {
     const id = +req.params.id;
-    const selectedTour = toursData.find((tour) => tour.id === id);
-    if (!selectedTour) {
+    const tour = toursData.find((tour) => tour.id === id);
+    if (!tour) {
       return res.status(404).json({
         status: 'fail',
         message: 'Invalid ID',
@@ -39,7 +38,7 @@ class TourController {
     });
   }
 
-  updateTourById(req, res) {
+  updateTour(req, res) {
     const id = +req.params.id;
     const tourUpdate = req.body;
     const selectedTour = toursData.find((tour) => tour.id === id);
@@ -54,23 +53,22 @@ class TourController {
     });
   }
 
-  deleteTourById(req, res) {
+  deleteTour(req, res) {
     const id = +req.params.id;
     const index = toursData.findIndex((tour) => tour.id === id);
-    if (index >= 0) {
-      toursData.splice(index, 1);
-      fs.writeFile('./dev-data/data/tours-simple.json', JSON.stringify(toursData), (error) => {
-        if (error) throw "Couldn't delete a tour";
-        res.status(200).json({
-          status: 'success',
-        });
-      });
-    } else {
+    if (index < 0) {
       return res.status(404).json({
         status: 'fail',
         message: 'Invalid ID',
       });
     }
+    toursData.splice(index, 1);
+    fs.writeFile('./dev-data/data/tours-simple.json', JSON.stringify(toursData), (error) => {
+      if (error) throw "Couldn't delete a tour";
+      res.status(200).json({
+        status: 'success',
+      });
+    });
   }
 }
 
