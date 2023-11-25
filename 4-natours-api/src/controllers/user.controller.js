@@ -74,4 +74,3 @@ class UserController {
 }
 
 module.exports = new UserController();
-console.log(module);
