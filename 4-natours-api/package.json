@@ -5,12 +5,14 @@
   "main": "index.js",
   "baseUrl": ".",
   "scripts": {
-    "dev": "nodemon src/server.js"
+    "dev": "dotenv env.development nodemon server.js",
+    "prod": "dotenv env.production nodemon server.js"
   },
   "keywords": [],
   "author": "Igor",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "morgan": "^1.10.0"
   },
