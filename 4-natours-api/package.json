@@ -5,8 +5,8 @@
   "main": "index.js",
   "baseUrl": ".",
   "scripts": {
-    "dev": "dotenv env.development nodemon server.js",
-    "prod": "dotenv env.production nodemon server.js"
+    "dev": "nodemon src/server.js",
+    "prod": "NODE_ENV=production nodemon src/server.js"
   },
   "keywords": [],
   "author": "Igor",
