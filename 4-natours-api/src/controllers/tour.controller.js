@@ -15,7 +15,7 @@ class TourController {
 
   checkBody(req, res, next) {
     const newTour = req.body;
-    if (!newTour['name'] || !newTour['price'])
+    if (!newTour.name || !newTour.price)
       return res.status(400).json({
         status: 'fail',
         message: 'Missing name or price',
@@ -33,7 +33,7 @@ class TourController {
 
   getTour(req, res) {
     const id = +req.params.id;
-    const tour = toursData.find((tour) => tour.id === id);
+    const tour = toursData.find((t) => t.id === id);
     res.status(200).json({
       status: 'success',
       data: { tour: tour },
