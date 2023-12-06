@@ -4,7 +4,8 @@ const toursData = JSON.parse(fs.readFileSync('./dev-data/data/tours-simple.json'
 
 class TourController {
   checkID(req, res, next, val) {
-    if (req.params.id * 1 > toursData.length) {
+    // if (req.params.id * 1 > toursData.length) {
+    if (val * 1 > toursData.length) {
       return res.status(404).json({
         status: 'fail',
         message: 'Invalid ID',
