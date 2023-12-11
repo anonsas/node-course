@@ -1,0 +1,27 @@
+req.body
+
+req.params 
+req.params.id 
+/people/:id
+
+req.query - searching, sorting, filtering, pagination.
+req.query.page
+/animals?page=10
+
+              | body | params
+C | POST      |  V   |   X
+R | GET       |  X   |   V
+U | PUT/PATCH |  V   |   V
+D | DELETE    |  X   |   V
+
+Access Token (accessing)
+Lives: 15-30 minutes
+Saved in: localStorage
+
+Refresh Token (refreshing)
+Lives: 15-60 days
+Saved in: cookies httpOnly
+
+/logout -> refresh token will be deleted from DB
+/refresh -> will be re-writing accessToken, if he is dead.
+By sending refreshToken and getting back { accessToken, refreshToken }

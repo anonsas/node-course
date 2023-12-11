@@ -1,12 +1,13 @@
-const dotenv = require('dotenv');
 const app = require('./app');
-const mongodb = require('mongodb');
-
-mongodb.MongoClient();
-
-dotenv.config({ path: '.env.development' });
+const mongoose = require('mongoose');
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server has start running on PORT ${PORT}`);
-});
+
+mongoose
+  .connect(process.env.MONGODB_CONNECTION.replace('<PASSWORD>', process.env.MONGODB_PASSWORD))
+  .then((resolve, reject) => {
+    console.log('Database connection established');
+    app.listen(PORT, () => {
+      console.log(`Server has start running on PORT ${PORT}`);
+    });
+  });

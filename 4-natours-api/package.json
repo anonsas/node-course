@@ -5,14 +5,15 @@
   "main": "index.js",
   "baseUrl": ".",
   "scripts": {
-    "dev": "nodemon src/server.js",
-    "prod": "NODE_ENV=production nodemon src/server.js"
+    "dev": "env-cmd -f .env.development nodemon src/server.js",
+    "prod": "env-cmd -f .env.production nodemon src/server.js"
   },
   "keywords": [],
   "author": "Igor",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.3.1",
+    "env-cmd": "^10.1.0",
     "express": "^4.18.2",
     "mongoose": "^8.0.2",
     "morgan": "^1.10.0"

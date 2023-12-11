@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const UserController = require('../controllers/user.controller');
+const UserController = require('../controller/user.controller');
 
 router.param('id', UserController.checkID); // Param middleware, fires on "id"
 

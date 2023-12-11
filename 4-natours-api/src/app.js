@@ -3,8 +3,8 @@ const morgan = require('morgan');
 
 const app = express();
 
-const TourRouter = require('./routes/tour.router');
-const UserRouter = require('./routes/user.router');
+const TourRouter = require('./router/tour.router');
+const UserRouter = require('./router/user.router');
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));

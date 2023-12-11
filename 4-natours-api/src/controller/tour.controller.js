@@ -1,6 +1,5 @@
 const fs = require('fs');
-
-const toursData = JSON.parse(fs.readFileSync('./dev-data/data/tours-simple.json'));
+const TourModel = require('../model/tour.model');
 
 class TourController {
   checkID(req, res, next, val) {
@@ -41,16 +40,18 @@ class TourController {
     });
   }
 
-  createTour(req, res) {
+  async createTour(req, res) {
     const newTour = req.body;
-    toursData.push({ id: toursData.length, ...newTour });
-    fs.writeFile('./dev-data/data/tours-simple.json', JSON.stringify(toursData), (error) => {
-      if (error) throw "Couldn't write a new tour";
+    try {
+      const saveNewTour = new TourModel({ name: newTour.name, rating: newTour.rating, price: newTour.price });
+      await saveNewTour.save();
       res.status(201).json({
         status: 'success',
-        data: { tour: { id: toursData.length - 1, ...newTour } },
+        data: { tour: saveNewTour },
       });
-    });
+    } catch (error) {
+      res.json(error.message);
+    }
   }
 
   updateTour(req, res) {
