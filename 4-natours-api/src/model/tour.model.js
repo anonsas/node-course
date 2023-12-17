@@ -6,4 +6,5 @@ const schema = new Schema({
   price: { type: Number, required: [true, 'A tour must have a price'] },
 });
 
-module.exports = model('Tour', schema);
+const TourModel = model('Tour', schema);
+module.exports = TourModel;

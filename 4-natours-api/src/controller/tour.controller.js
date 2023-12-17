@@ -2,17 +2,6 @@ const fs = require('fs');
 const TourModel = require('../model/tour.model');
 
 class TourController {
-  checkID(req, res, next, val) {
-    // if (req.params.id * 1 > toursData.length) {
-    if (val * 1 > toursData.length) {
-      return res.status(404).json({
-        status: 'fail',
-        message: 'Invalid ID',
-      });
-    }
-    next();
-  }
-
   checkBody(req, res, next) {
     const newTour = req.body;
     if (!newTour.name || !newTour.price)
@@ -43,7 +32,7 @@ class TourController {
   async createTour(req, res) {
     const newTour = req.body;
     try {
-      const saveNewTour = new TourModel({ name: newTour.name, rating: newTour.rating, price: newTour.price });
+      const saveNewTour = TourModel({ name: newTour.name, rating: newTour.rating, price: newTour.price });
       await saveNewTour.save();
       res.status(201).json({
         status: 'success',
