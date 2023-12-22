@@ -35,9 +35,8 @@ class TourController {
   }
 
   async createTour(req, res) {
-    const { name, rating, price } = req.body;
     try {
-      const tour = await TourModel.create({ name, rating, price });
+      const tour = await TourModel.create(req.body);
       res.status(201).json({ status: 'success', data: { tour } });
     } catch (error) {
       res.status(400).json({
