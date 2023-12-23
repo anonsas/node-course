@@ -1,10 +1,13 @@
-const fs = require('fs');
 const TourModel = require('../model/tour.model');
 
 class TourController {
   async getTours(req, res) {
     try {
-      const tours = await TourModel.find();
+      let queryJSON = JSON.stringify(req.query);
+      queryJSON = queryJSON.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
+      const query = TourModel.find(JSON.parse(queryStr));
+      const tours = await query;
+      // const tours = await TourModel.find().lte('price', 1500).gte('duration', 5).where('difficulty').equals('easy');
       res.status(200).json({
         status: 'success',
         results: tours.length,

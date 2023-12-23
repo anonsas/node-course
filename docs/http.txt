@@ -1,12 +1,19 @@
 req.body
+---------------------------------------------------------------
 
-req.params 
-req.params.id 
+// ROUTE PARAMETERS - FRONT END
+// PATH PARAMETERS (PATH VARIABLE) - BACK END
+
+(req.params - to identify a specific resource) 
 /people/:id
+req.params.id 
+---------------------------------------------------------------
 
-req.query - searching, sorting, filtering, pagination.
-req.query.page
+// SEARCH PARAMETERS - FRONT END
+// QUERY PARAMETERS - BACK END
+(req.query - searching, sorting, filtering, pagination)
 /animals?page=10
+req.query.page
 
               | body | params
 C | POST      |  V   |   X
