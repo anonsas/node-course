@@ -1,55 +1,66 @@
 const TourModel = require('../model/tour.model');
 
+class APIFeatures {
+  constructor(model, queryParams) {
+    this.model = model;
+    this.queryParams = queryParams;
+    console.log('queryParams', queryParams);
+  }
+
+  filter() {
+    let queryJSON = JSON.stringify(this.queryParams);
+    queryJSON = queryJSON.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
+    this.model = this.model.find(JSON.parse(queryJSON));
+
+    return this;
+  }
+
+  sort() {
+    if (this.queryParams.sort) {
+      const sortBy = this.queryParams.sort.replaceAll(',', ' ');
+      console.log('sortBy', sortBy);
+      this.model = this.model.sort(sortBy);
+    } else {
+      this.model = this.model.sort('-createdAt');
+    }
+
+    return this;
+  }
+
+  limitFields() {
+    if (this.queryParams.fields) {
+      const limitFieldsBy = this.queryParams.fields.replaceAll(',', ' ');
+      console.log('limitFieldsBy', limitFieldsBy);
+      this.model = this.model.select(limitFieldsBy);
+    } else {
+      this.model = this.model.select('-__v');
+    }
+
+    return this;
+  }
+
+  paginate() {
+    const page = this.queryParams.page * 1 || 1;
+    const limit = this.queryParams.limit * 1 || 10;
+    const skip = (page - 1) * limit; // Ex. page: 2, show: 11-20
+    this.model = this.model.skip(skip).limit(limit);
+
+    return this;
+  }
+}
+
 class TourController {
   async getTopTours(req, res, next) {
+    // api/tours?limit=5,sort=-ratingsAverage,price
     req.query.limit = 5;
     req.query.sort = '-ratingsAverage,price';
     next();
   }
 
-  async getTours(req, res) {
+  async getTours(req, res, next) {
     try {
-      console.log(req.query);
-      const excludedFields = ['page', 'sort', 'limit', 'fields'];
-
-      // Filtering
-      let queryJSON = JSON.stringify(req.query);
-      queryJSON = queryJSON.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
-      let query = TourModel.find(JSON.parse(queryJSON));
-
-      // Sorting
-      if (req.query.sort) {
-        const sortBy = req.query.sort.replaceAll(',', ' ');
-        console.log('sortBy', sortBy);
-        query.sort(sortBy);
-      } else {
-        query.sort('-createdAt');
-      }
-
-      // Limiting Fields
-      if (req.query.fields) {
-        const limitFieldsBy = req.query.fields.replaceAll(',', ' ');
-        console.log('limitFieldsBy', limitFieldsBy);
-        query.select(limitFieldsBy);
-      } else {
-        query.select('-__v');
-      }
-
-      // Pagination
-      const page = req.query.page * 1 || 1;
-      const limit = req.query.limit * 1 || 10;
-      const skip = (page - 1) * limit; // Ex. page: 2, show: 11-20
-      query.skip(skip).limit(limit);
-
-      if (req.query.page) {
-        const toursCount = await TourModel.countDocuments();
-        console.log('toursCount', toursCount);
-        if (skip >= toursCount) {
-          throw new Error('This page does not exist');
-        }
-      }
-
-      const tours = await query;
+      const features = new APIFeatures(TourModel.find(), req.query).filter().sort().limitFields().paginate();
+      const tours = await features.model;
       res.status(200).json({
         status: 'success',
         results: tours.length,
